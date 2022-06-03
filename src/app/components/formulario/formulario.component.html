@@ -1,0 +1,181 @@
+<div class="content" role="main">
+
+    <mat-tab-group mat-align-tabs="center" #tabgroup>
+      <mat-tab label="Tab 1">
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">list</mat-icon>
+          Lista de Socios
+        </ng-template>
+        <mat-list>
+          <h2 class="center">Socios</h2>
+          <mat-list-item *ngFor="let p of array">
+            <mat-icon mat-list-icon>contacts</mat-icon>
+            <div>
+              <span>{{ p == arrayCheck ? ListaSocios.value.nombre : p.nombre }}</span>&nbsp;&nbsp;
+              <span>{{
+                p == arrayCheck ? ListaSocios.value.apellidos : p.apellidos
+              }}</span>&nbsp;
+              <span>Número de socio:
+                {{ p == arrayCheck ? ListaSocios.value.miembro : p.miembro }}</span><br />
+              <span>DNI: {{ p == arrayCheck ? ListaSocios.value.id : p.id }}</span>&nbsp;
+              <span>Telefono:
+                {{ p == arrayCheck ? ListaSocios.value.telefono : p.telefono }} </span>&nbsp;
+              <span>Genero:
+                {{ p == arrayCheck ? ListaSocios.value.genero : p.genero }}</span>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </mat-tab>
+  
+      <mat-tab label="Tab 2">
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">group_add</mat-icon>
+          Altas Nuevas
+        </ng-template>
+        <form class="" [formGroup]="ListaSocios" (ngSubmit)="onSubmit(tabgroup)">
+          <div class="form-box">
+            <!-- Nombre / Apellidos -->
+            <div class="container-form center">
+              <mat-form-field hintLabel="Minimo 3 caracteres" appearance="outline">
+                <mat-label>Nombre</mat-label>
+                <input matInput #nombre id="nombre" formControlnombre="nombre" nombre="nombre" minlength="3" placeholder="">
+                <mat-hint align="end">{{nombre.value?.length || 0}}</mat-hint>
+              </mat-form-field>
+  
+              <mat-form-field hintLabel="Minimo 3 caracteres" appearance="outline">
+                <mat-label>Apellidos</mat-label>
+                <input matInput #apellidos id="apellidos" formControlnombre="apellidos" nombre="apellidos" minlength="3"
+                  placeholder="">
+                <mat-hint align="end">{{apellidos.value?.length || 0}}</mat-hint>
+              </mat-form-field>
+            </div>
+            <!-- DNI / Telefono -->
+            <div class="container-form center">
+              <mat-form-field hintLabel="8 números y 1 letra" appearance="outline">
+                <mat-label>DNI</mat-label>
+                <input matInput #id id="id" formControlnombre="id" nombre="id" minlength="9" maxlength="9" placeholder=""
+                  pattern="^[0-9]{8,8}[A-Za-z]$">
+                <mat-hint align="end">{{id.value?.length || 0}}/9</mat-hint>
+              </mat-form-field>
+  
+              <mat-form-field hintLabel="" appearance="outline">
+                <mat-label>Telefono</mat-label>
+                <input matInput #telefono id="telefono" formControlnombre="telefono" nombre="telefono" minlength="9" maxlength="9"
+                  placeholder="" type="number">
+                <mat-hint align="end">{{telefono.value?.length || 0}}/9</mat-hint>
+              </mat-form-field>
+            </div>
+            <!-- Genero -->
+            <div class="container-form center">
+              <mat-form-field appearance="fill" class="full-width-field">
+                <mat-label>Genero</mat-label>
+                <mat-select disableRipple formControlnombre="genero" id="genero" nombre="genero">
+                  <mat-option value="Masculino">Masculino</mat-option>
+                  <mat-option value="Femenino">Femenino</mat-option>
+                </mat-select>
+                <mat-hint align="end">Selecciona una opción</mat-hint>
+              </mat-form-field>
+            </div>
+            <!-- Botón -->
+            <div class="container-form center">
+              <button mat-fab color="primary" aria-label="Enviar formulario" type="submit">
+                <mat-icon>enviar</mat-icon>
+              </button>
+            </div>
+          </div>
+        </form>
+  
+  
+  
+      </mat-tab>
+  
+      <mat-tab label="Tab 3">
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">backspace</mat-icon>
+          Modificar / Borrar Socios
+        </ng-template>
+  
+        <mat-list>
+          <h2 class="center">Socios</h2>
+          <mat-list-item *ngFor="let p of array">
+            <mat-icon mat-list-icon>contacts</mat-icon>
+            <div>
+              <span>{{ p == arrayCheck ? ListaSocios.value.nombre : p.nombre }}</span>&nbsp;&nbsp;
+              <span>{{ p == arrayCheck ? ListaSocios.value.apellidos : p.apellidos }}</span>&nbsp;
+              <span>Número de socio: {{ p == arrayCheck ? ListaSocios.value.miembro : p.miembro }}</span><br />
+              <span>DNI: {{ p == arrayCheck ? ListaSocios.value.id : p.id }}</span>&nbsp;
+              <span>Telefono: {{ p == arrayCheck ? ListaSocios.value.telefono : p.telefono }} </span>&nbsp;
+              <span>Genero: {{ p == arrayCheck ? ListaSocios.value.genero : p.genero }}</span>
+            </div>
+            <p>
+              <button mat-raised-button color="basic" (click)="
+                p == arrayCheck
+                  ? terminarModificacion($event, p)
+                  : modificar($event, p)
+              ">
+                {{ p == arrayCheck ? "Hecho" : "Modificar" }}
+              </button>
+              &nbsp;&nbsp;
+              <button mat-mini-fab color="warn" aria-label="Borrar" (click)="eliminar($event, p)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </p>
+            <mat-divider></mat-divider>
+          </mat-list-item>
+        </mat-list>
+  
+        <button mat-raised-button color="primary" aria-label="Inicio" (click)="changeIndex(tabgroup)"
+          class="center_button">
+          Volver a la lista
+        </button>
+  
+        <form class="hidden" [formGroup]="ListaSocios" (ngSubmit)="onSubmit(tabgroup)" id="modificacion">
+          <div class="form-box">
+            <!-- Nombre / Apellidos -->
+            <div class="container-form center">
+              <mat-form-field hintLabel="Minimo 3 caracteres" appearance="outline">
+                <mat-label>Nombre</mat-label>
+                <input matInput #nombre id="nombre" formControlName="nombre" name="nombre" minlength="3" placeholder="">
+                <mat-hint align="end">{{nombre.value?.length || 0}}</mat-hint>
+              </mat-form-field>
+  
+              <mat-form-field hintLabel="Minimo 3 caracteres" appearance="outline">
+                <mat-label>Apellidos</mat-label>
+                <input matInput #apellidos id="apellidos" formControlName="apellidos" name="apellidos" minlength="3"
+                  placeholder="">
+                <mat-hint align="end">{{apellidos.value?.length || 0}}</mat-hint>
+              </mat-form-field>
+            </div>
+            <!-- DNI / Telefono -->
+            <div class="container-form center">
+              <mat-form-field hintLabel="8 números y 1 letra" appearance="outline">
+                <mat-label>DNI</mat-label>
+                <input matInput #id id="id" formControlName="id" name="id" minlength="9" maxlength="9" placeholder=""
+                  pattern="^[0-9]{8,8}[A-Za-z]$">
+                <mat-hint align="end">{{id.value?.length || 0}}/9</mat-hint>
+              </mat-form-field>
+  
+              <mat-form-field hintLabel="" appearance="outline">
+                <mat-label>Telefono</mat-label>
+                <input matInput #telefono id="telefono" formControlName="telefono" name="telefono" minlength="9" maxlength="9"
+                  placeholder="" type="number">
+                <mat-hint align="end">{{telefono.value?.length || 0}}/9</mat-hint>
+              </mat-form-field>
+            </div>
+            <!-- Genero -->
+            <div class="container-form center">
+              <mat-form-field appearance="fill" class="full-width-mod">
+                <mat-label>Genero</mat-label>
+                <mat-select disableRipple formControlName="genero" id="genero" name="genero">
+                  <mat-option value="Masculino">Masculino</mat-option>
+                  <mat-option value="Femenino">Femenino</mat-option>
+                </mat-select>
+                <mat-hint align="end">Selecciona una opción</mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+  
+      </mat-tab>
+    </mat-tab-group>
+  </div>
